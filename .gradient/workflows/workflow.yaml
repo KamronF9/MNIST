@@ -1,34 +1,42 @@
-'on':
+on:
   github:
     branches:
       only: main
+
 jobs:
-  CloneRepo:
+
+  cloneRepo:
     resources:
-      instance-type: C5
+      instance-type: C4
     outputs:
       repo:
         type: volume
     uses: git-checkout@v1
     with:
       url: context.event.github.url
-  HelloWorld:
+      ref: context.event.github.ref
+
+  runAlgo:
     resources:
-      instance-type: C5
+      instance-type: C4
     needs:
-      - CloneRepo
+      - cloneRepo
     inputs:
-      repo: CloneRepo.outputs.repo
+      repo: cloneRepo.outputs.repo
     outputs:
       data:
         type: dataset
         with:
-          id: test-data
-      # The container is responsible creating the file "/outputs/<name>" with the
-      # content being a small-ish utf-8 encoded string.
-      #echo2:
-      #  type: string
+          ref: demo-dataset
     uses: script@v1
     with:
-      script: python /inputs/repo/hello.py
-      image: tensorflow/tensorflow:1.14.0-py3
+      script: |-
+        python /inputs/repo/hello.py
+        #cp -R /inputs/repo 
+        #cd /nlp
+        #pip3 install -U transformers
+        #python3 nlp_text_generation.py
+        #mv output.txt /outputs/generatedText
+        #ls "-aFlR" /outputs/generatedText
+      image: kamrondocker/trading:r2
+      #image: paperspace/transformers-gpu:0.4.0
