@@ -19,6 +19,15 @@ jobs:
       - CloneRepo
     inputs:
       repo: CloneRepo.outputs.repo
+    outputs:
+      data:
+        type: dataset
+        with:
+          id: test-data
+      # The container is responsible creating the file "/outputs/<name>" with the
+      # content being a small-ish utf-8 encoded string.
+      #echo2:
+      #  type: string
     uses: script@v1
     with:
       script: python /inputs/repo/hello.py
