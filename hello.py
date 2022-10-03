@@ -2,10 +2,13 @@
 import tensorflow as tf
 
 # Simple hello world using TensorFlow
-hello = tf.constant('Hello, TensorFlow a second time just by pushing this change!')
+hello = 'Hello, TensorFlow!'
 
 # Start tf session
-sess = tf.Session()
+#sess = tf.Session()
 
 # Run the op
-print(sess.run(hello))
+#print(sess.run(hello))
+fpOut = open(r'/outputs/data/test.txt',"w")
+print(hello,file=fpOut)
+fpOut.close() 
